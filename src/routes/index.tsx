@@ -12,7 +12,7 @@ import { useCopilot } from "@/hooks/useCopilot";
 import { currentDocument } from "@/lib/mock-data";
 
 const BACKEND_URL =
-  "https://pdf-copilot-api.onrender.com/";
+  "https://pdf-copilot-api.onrender.com";
 
 export const Route = createFileRoute("/")({
   head: () => ({

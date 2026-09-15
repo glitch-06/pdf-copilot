@@ -5,7 +5,7 @@ import type {
 } from "@/types/copilot";
 
 const BACKEND_URL =
-  "http://127.0.0.1:8000";
+  "https://pdf-copilot-api.onrender.com/";
 
 const delay = (ms: number) =>
   new Promise((resolve) =>

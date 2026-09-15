@@ -30,6 +30,7 @@ app.add_middleware(
         "http://127.0.0.1:8080",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://pdf-copilot-tau.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -235,8 +236,6 @@ def score_chunk(
                 3,
             ) * 0.25
 
-    # Slightly reward chunks containing
-    # multiple distinct question terms.
     unique_matches = sum(
         1
         for token in set(question_tokens)
@@ -289,10 +288,6 @@ def retrieve_chunks(
         if score > 0
     ][:max_chunks]
 
-    # If keyword retrieval finds nothing,
-    # use the beginning of the document.
-    # This is especially useful for broad
-    # questions such as "What is the main idea?"
     if not selected:
         selected = chunks[:max_chunks]
 
@@ -620,10 +615,6 @@ def chat(
                 },
             )
 
-    # -----------------------------------------------------
-    # Selection + document context
-    # -----------------------------------------------------
-
     if request.selected_content:
 
         document_context = ""
@@ -690,10 +681,6 @@ Do not invent information.
 Use Markdown where useful.
 """
 
-    # -----------------------------------------------------
-    # Document-only chat
-    # -----------------------------------------------------
-
     elif document:
 
         relevant_chunks = retrieve_chunks(
@@ -742,10 +729,6 @@ Use Markdown where useful.
 
 Be clear and concise.
 """
-
-    # -----------------------------------------------------
-    # No document
-    # -----------------------------------------------------
 
     else:
 
@@ -800,9 +783,6 @@ def summarize(
             },
         )
 
-    # Retrieve representative chunks instead
-    # of sending hundreds of thousands of
-    # characters directly to Gemini.
     chunks = document.get(
         "chunks",
         [],
@@ -820,8 +800,6 @@ def summarize(
             },
         )
 
-    # For now, use evenly distributed chunks
-    # to represent the entire document.
     max_summary_chunks = 30
 
     if len(chunks) <= max_summary_chunks:
